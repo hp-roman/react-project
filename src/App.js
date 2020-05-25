@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
+import { Router } from 'react-router-dom';
+import history from './services/history';
+import Routes from './routes/';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello world</h1>
-    </div>
+    <Router history={history}>
+      <Routes />
+    </Router>
   );
 }
-
 export default App;
