@@ -3,9 +3,9 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
-import {useHistory} from 'react-router-dom';
+import history from '../services/history';
 
-class Login extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +53,7 @@ class Login extends Component {
       password: this.state.password,
     };
     if (payload.username === "admin" && payload.password === "admin") {
-      useHistory.push('/home');
+      history.push('/home');
     } else {
     }
   }
@@ -61,4 +61,4 @@ class Login extends Component {
 const style = {
   margin: 15,
 };
-export default Login;
+export default LoginScreen;
