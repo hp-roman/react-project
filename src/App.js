@@ -1,14 +1,10 @@
-import React from 'react';
 import './App.css';
-import { Router } from 'react-router-dom';
-import history from './services/history';
-import Routes from './routes/';
+import LoginScreen from './pages/LoginScreen';
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <Router history={history}>
-      <Routes />
-    </Router>
-  );
+class App extends Component{
+  render(){
+    return (<LoginScreen/>);
+  }
 }
 export default App;

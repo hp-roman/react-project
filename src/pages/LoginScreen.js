@@ -3,6 +3,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
+import {useHistory} from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
@@ -47,12 +48,12 @@ class Login extends Component {
     );
   }
   handleClick(event) {
-    console.log('object');
     const payload = {
       username: this.state.username,
       password: this.state.password,
     };
     if (payload.username === "admin" && payload.password === "admin") {
+      useHistory.push('/home');
     } else {
     }
   }

@@ -11,7 +11,7 @@ class HomePage extends Component {
     render(){
         return(
             <MuiThemeProvider>
-                <AppBar></AppBar>
+                <AppBar>asdfasdfs</AppBar>
             </MuiThemeProvider>
         );
     }
