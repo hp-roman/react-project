@@ -3,7 +3,8 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
-import history from '../services/history';
+import history from "../services/history";
+import Axios from "axios";
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -11,11 +12,12 @@ class LoginScreen extends Component {
     this.state = {
       username: "",
       password: "",
+      message: "",
     };
   }
   render() {
     return (
-      <div>
+      <div style={{ textAlign: "center" }}>
         <MuiThemeProvider>
           <div>
             <AppBar title="Login" />
@@ -36,6 +38,7 @@ class LoginScreen extends Component {
               }
             />
             <br />
+            <h3 style={{color:"red"}}>{this.state.message}</h3>
             <RaisedButton
               label="Submit"
               primary={true}
@@ -50,12 +53,20 @@ class LoginScreen extends Component {
   handleClick(event) {
     const payload = {
       username: this.state.username,
-      password: this.state.password,
+      password: this.state.password
     };
-    if (payload.username === "admin" && payload.password === "admin") {
-      history.push('/home');
-    } else {
-    }
+    const url = `https://hml-project.herokuapp.com/api/admin/login`;
+    Axios.post(url, payload).then((res) => {
+      console.log(res.data);
+      if (res.data.success === true) {
+        localStorage.setItem("token", res.data.token);
+        history.push("/home");
+      } else {
+        this.setState({
+          message: res.data.message,
+        });
+      }
+    });
   }
 }
 const style = {
