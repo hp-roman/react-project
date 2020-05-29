@@ -3,8 +3,8 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
-import history from "../services/history";
 import Axios from "axios";
+import CircularProgress from 'material-ui/CircularProgress';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class LoginScreen extends Component {
       username: "",
       password: "",
       message: "",
+      isLoading: false,
     };
   }
   render() {
@@ -38,7 +39,7 @@ class LoginScreen extends Component {
               }
             />
             <br />
-            <h3 style={{color:"red"}}>{this.state.message}</h3>
+            {this.state.isLoading? <CircularProgress style={styleProgress}/>: <h3 style={{color:"red"}}>{this.state.message}</h3>}
             <RaisedButton
               label="Submit"
               primary={true}
@@ -55,15 +56,16 @@ class LoginScreen extends Component {
       username: this.state.username,
       password: this.state.password
     };
+    this.setState({isLoading: true});
     const url = `https://hml-project.herokuapp.com/api/admin/login`;
     Axios.post(url, payload).then((res) => {
-      console.log(res.data);
       if (res.data.success === true) {
         localStorage.setItem("token", res.data.token);
-        history.push("/home");
+        this.props.history.push("/home");
       } else {
         this.setState({
           message: res.data.message,
+          isLoading: false
         });
       }
     });
@@ -72,4 +74,8 @@ class LoginScreen extends Component {
 const style = {
   margin: 15,
 };
+const styleProgress = {
+  display: 'block',
+  margin: 'auto'
+}
 export default LoginScreen;
