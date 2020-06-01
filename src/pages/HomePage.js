@@ -3,9 +3,14 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import { RaisedButton, ListItem } from "material-ui";
 import { List } from "material-ui/List";
-import items from '../assets/items';
+import {items} from '../assets/items';
 
 class HomePage extends Component {
+  constructor(props){
+    super(props);
+    const token = localStorage.getItem('token');
+    if(!token) this.props.history.push('/');
+  }
   showList = () => {
     const listItem = [];
     items.forEach((item, index) => {

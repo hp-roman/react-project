@@ -4,7 +4,7 @@ import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
 import Axios from "axios";
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress from "material-ui/CircularProgress";
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class LoginScreen extends Component {
       message: "",
       isLoading: false,
     };
+    localStorage.removeItem('token');
   }
   render() {
     return (
@@ -39,7 +40,11 @@ class LoginScreen extends Component {
               }
             />
             <br />
-            {this.state.isLoading? <CircularProgress style={styleProgress}/>: <h3 style={{color:"red"}}>{this.state.message}</h3>}
+            {this.state.isLoading ? (
+              <CircularProgress style={styleProgress} />
+            ) : (
+              <h3 style={{ color: "red" }}>{this.state.message}</h3>
+            )}
             <RaisedButton
               label="Submit"
               primary={true}
@@ -52,20 +57,18 @@ class LoginScreen extends Component {
     );
   }
   handleClick(event) {
-    const payload = {
-      username: this.state.username,
-      password: this.state.password
-    };
-    this.setState({isLoading: true});
-    const url = `https://hml-project.herokuapp.com/api/admin/login`;
-    Axios.post(url, payload).then((res) => {
+      const username = this.state.username;
+      const password = this.state.password;
+    this.setState({ isLoading: true });
+    const url = `https://hml-project.herokuapp.com/api/admin/login?username=${username}&password=${password}`;
+    Axios.post(url).then((res) => {
       if (res.data.success === true) {
         localStorage.setItem("token", res.data.token);
         this.props.history.push("/home");
       } else {
         this.setState({
           message: res.data.message,
-          isLoading: false
+          isLoading: false,
         });
       }
     });
@@ -75,7 +78,7 @@ const style = {
   margin: 15,
 };
 const styleProgress = {
-  display: 'block',
-  margin: 'auto'
-}
+  display: "block",
+  margin: "auto",
+};
 export default LoginScreen;
