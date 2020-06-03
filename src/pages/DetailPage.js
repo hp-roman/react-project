@@ -17,6 +17,7 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 import {items, properties} from '../assets/items';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import { TableHead } from "@material-ui/core";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -119,7 +120,7 @@ function createData(name, calories, fat) {
     createData('Oreo', 437, 18.0),
   ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
-function CustomPaginationActionsTable() {
+function CustomPaginationActionsTable(titles) {
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -139,6 +140,13 @@ function CustomPaginationActionsTable() {
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="custom pagination table">
+          <TableHead>
+            <TableRow>
+              {titles.map(value => {
+                return (<TableCell style={styleHeadCell} key={value.name}>{value.name}</TableCell>);
+              })}
+            </TableRow>
+          </TableHead>
         <TableBody>
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -166,7 +174,7 @@ function CustomPaginationActionsTable() {
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              rowsPerPageOptions={[5, 20, 100, { label: "All", value: -1 }]}
               colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}
@@ -199,13 +207,17 @@ class DetailPage extends Component {
         parttern.len - parttern.pos
       ),
       titles: items,
+      listTables: properties
+
     };
   }
   getResource = () => {
       return [12,23,4,1,2,5,7,7,4,545,56,3434,3423]
   }
-  createTable(){
-      return(CustomPaginationActionsTable());
+  createTable = () => {
+      const headrow = this.state.listTables[this.state.idSelected];
+      console.log(headrow);
+      return(CustomPaginationActionsTable(headrow));
   }
 
   render() {
@@ -213,14 +225,19 @@ class DetailPage extends Component {
       <MuiThemeProvider>
         <div>
           <AppBar
-            title={this.state.titles[this.idSelected]}
+            title={this.state.titles[this.state.idSelected]}
             style={{ textAlign: "center" }}
           />
-         <this.createTable></this.createTable>
+         <this.createTable/>
         </div>
       </MuiThemeProvider>
     );
   }
+}
+
+const styleHeadCell = {
+  fontWeight: 'bold',
+  fontSize: 15
 }
 
 
