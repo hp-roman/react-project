@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -14,10 +14,11 @@ import FirstPageIcon from "@material-ui/icons/FirstPage";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
-import {items, properties} from '../assets/items';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import { TableHead } from "@material-ui/core";
+import { items, properties } from "../assets/items";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import AppBar from "material-ui/AppBar";
+import { TableHead, CircularProgress } from "@material-ui/core";
+import Axios from "axios";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -101,24 +102,24 @@ const useStyles2 = makeStyles({
   },
 });
 function createData(name, calories, fat) {
-    return { name, calories, fat };
-  }
-  
-  const rows = [
-    createData('Cupcake', 305, 3.7),
-    createData('Donut', 452, 25.0),
-    createData('Eclair', 262, 16.0),
-    createData('Frozen yoghurt', 159, 6.0),
-    createData('Gingerbread', 356, 16.0),
-    createData('Honeycomb', 408, 3.2),
-    createData('Ice cream sandwich', 237, 9.0),
-    createData('Jelly Bean', 375, 0.0),
-    createData('KitKat', 518, 26.0),
-    createData('Lollipop', 392, 0.2),
-    createData('Marshmallow', 318, 0),
-    createData('Nougat', 360, 19.0),
-    createData('Oreo', 437, 18.0),
-  ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+  return { name, calories, fat };
+}
+
+const rows = [
+  createData("Cupcake", 305, 3.7),
+  createData("Donut", 452, 25.0),
+  createData("Eclair", 262, 16.0),
+  createData("Frozen yoghurt", 159, 6.0),
+  createData("Gingerbread", 356, 16.0),
+  createData("Honeycomb", 408, 3.2),
+  createData("Ice cream sandwich", 237, 9.0),
+  createData("Jelly Bean", 375, 0.0),
+  createData("KitKat", 518, 26.0),
+  createData("Lollipop", 392, 0.2),
+  createData("Marshmallow", 318, 0),
+  createData("Nougat", 360, 19.0),
+  createData("Oreo", 437, 18.0),
+].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
 function CustomPaginationActionsTable(titles) {
   const classes = useStyles2();
@@ -140,13 +141,17 @@ function CustomPaginationActionsTable(titles) {
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="custom pagination table">
-          <TableHead>
-            <TableRow>
-              {titles.map(value => {
-                return (<TableCell style={styleHeadCell} key={value.name}>{value.name}</TableCell>);
-              })}
-            </TableRow>
-          </TableHead>
+        <TableHead>
+          <TableRow>
+            {titles.map((value) => {
+              return (
+                <TableCell style={styleHeadCell} key={value.name}>
+                  {value.name}
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        </TableHead>
         <TableBody>
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -207,28 +212,73 @@ class DetailPage extends Component {
         parttern.len - parttern.pos
       ),
       titles: items,
-      listTables: properties
-
+      listTables: properties,
+      result: [],
     };
   }
-  getResource = () => {
-      return [12,23,4,1,2,5,7,7,4,545,56,3434,3423]
-  }
   createTable = () => {
-      const headrow = this.state.listTables[this.state.idSelected];
-      console.log(headrow);
-      return(CustomPaginationActionsTable(headrow));
+    let data, rows;
+
+    data = this.state.result;
+    rows = data.data;
+    if (rows) {
+      const head = this.state.listTables[this.state.idSelected];
+      return CustomPaginationActionsTable(head, rows);
+    } else {
+      return <CircularProgress style={{margin: 'auto'}}></CircularProgress>;
+    }
+  };
+  componentWillMount() {
+    switch (parseInt(this.state.idSelected)) {
+      case 0:
+        Axios.get("http://hml-project.herokuapp.com/api/admin/food").then(
+          (res) => {
+            this.setState({ result: res.data });
+          }
+        );
+        break;
+      case 1:
+        Axios.get("http://hml-project.herokuapp.com/api/admin/nutrition").then(
+          (res) => {
+            this.setState({ result: res.data });
+          }
+        );
+        break;
+      case 2:
+        Axios.get("http://hml-project.herokuapp.com/api/admin/dish").then(
+          (res) => {
+            this.setState({ result: res.data });
+          }
+        );
+        break;
+      case 3:
+        Axios.get("http://hml-project.herokuapp.com/api/admin/menu").then(
+          (res) => {
+            this.setState({ result: res.data });
+          }
+        );
+        break;
+      case 4:
+        Axios.get("http://hml-project.herokuapp.com/api/admin/user").then(
+          (res) => {
+            this.setState({ result: res.data });
+          }
+        );
+        break;
+      default:
+        this.props.history.push("/home");
+    }
   }
 
   render() {
     return (
       <MuiThemeProvider>
-        <div>
+        <div style={{textAlign: 'center'}}>
           <AppBar
             title={this.state.titles[this.state.idSelected]}
             style={{ textAlign: "center" }}
           />
-         <this.createTable/>
+          <this.createTable/>
         </div>
       </MuiThemeProvider>
     );
@@ -236,9 +286,8 @@ class DetailPage extends Component {
 }
 
 const styleHeadCell = {
-  fontWeight: 'bold',
-  fontSize: 15
-}
-
+  fontWeight: "bold",
+  fontSize: 15,
+};
 
 export default DetailPage;
