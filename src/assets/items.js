@@ -8,35 +8,35 @@ const items = [
 
 const properties = [
   [
-    {name: 'Name', map: 'name'},
-    {name: 'Price', map: 'price'},
-    {name: 'Image', map: 'img'},
-    {name: 'Link', map: 'url'},
+    {title: 'Name', field: 'name'},
+    {title: 'Price', field: 'price'},
+    {title: 'Image', field: 'img'},
+    {title: 'Link', field: 'url'},
   ],
   [
-    {name: 'Name', map: 'name'},
-    {name: 'Kcal', map: 'kcal'},
-    {name: 'Protein', map: 'protein'},
-    {name: 'Lipid', map: 'lipid'},
-    {name: 'Glucid', map: 'glucid'}
+    {title: 'Name', field: 'name'},
+    {title: 'Kcal', field: 'kcal'},
+    {title: 'Protein', field: 'protein'},
+    {title: 'Lipid', field: 'lipid'},
+    {title: 'Glucid', field: 'glucid'}
   ],
   [
-    {name: 'Name', map: 'name'},
-    {name: 'Image', map: 'img'},
-    {name: 'Link', map: 'url'},
-    {name: 'Ingredient', map: 'ingredient'},
-    {name: 'Price', map: 'price'}
+    {title: 'Name', field: 'name'},
+    {title: 'Image', field: 'img'},
+    {title: 'Link', field: 'url'},
+    {title: 'Ingredient', field: 'ingredient'},
+    {title: 'Price', field: 'price'}
   ],
   [
-    {name: 'Name', map: 'name'},
-    {name: 'Spcecial', map: 'isSpecial'},
-    {name: 'Image', map: 'img'}
+    {title: 'Name', field: 'name'},
+    {title: 'Spcecial', field: 'isSpecial'},
+    {title: 'Image', field: 'img'}
   ],
   [
-    {name: 'Username', map: 'username'},
-    {name: 'Password', map: 'password'},
-    {name: 'Email', map: 'email'},
-    {name: 'Name', map: 'name'}
+    {title: 'Username', field: 'username'},
+    {title: 'Password', field: 'password'},
+    {title: 'Email', field: 'email'},
+    {title: 'Name', field: 'name'}
   ]
 ];
 export {items, properties};

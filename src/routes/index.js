@@ -4,7 +4,6 @@ import history from "../services/history";
 import HomePage from "../pages/HomePage";
 import LoginScreen from "../pages/LoginScreen";
 import DetailPage from '../pages/DetailPage';
-
 class Routes extends Component {
   render() {
     return (
