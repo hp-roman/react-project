@@ -77,19 +77,12 @@ export default class MaterialTableDemo extends React.Component {
   }
 
   render() {
-    // const link = [
-    //   'http://hml-project.herokuapp.com/api/admin/food',
-    //   'http://hml-project.herokuapp.com/api/admin/nutrition',
-    //   'http://hml-project.herokuapp.com/api/admin/dish',
-    //   'http://hml-project.herokuapp.com/api/admin/menu',
-    //   'http://hml-project.herokuapp.com/api/admin/user'
-    // ]
     const link = [
-      "http://localhost:5000/api/admin/food",
-      "http://localhost:5000/api/admin/nutrition",
-      "http://localhost:5000/api/admin/dish",
-      "http://localhost:5000/api/admin/menu",
-      "http://localhost:5000/api/admin/user",
+      'http://hml-project.herokuapp.com/api/admin/food',
+      'http://hml-project.herokuapp.com/api/admin/nutrition',
+      'http://hml-project.herokuapp.com/api/admin/dish',
+      'http://hml-project.herokuapp.com/api/admin/menu',
+      'http://hml-project.herokuapp.com/api/admin/user'
     ];
     const load = this.state.data.length;
     if (!load) {
@@ -108,26 +101,33 @@ export default class MaterialTableDemo extends React.Component {
           editable={{
             onRowAdd: (newData) =>
               new Promise((resolve) => {
-                setTimeout(() => {
+                setTimeout(async () => {
+                  const json = JSON.stringify(newData);
+                  const dataFromAPI = await Axios.post(
+                      `${link[this.state.idSelected]}?json=${json}`
+                    );
+                  if(dataFromAPI['data']['success']){
+                    let data = dataFromAPI['data']['data'];
+                    if(data.length === undefined) data = [data];
+                    this.setState({data: data});
+                  }
                   resolve();
-                  this.setState((prevState) => {
-                    const data = [...prevState.data];
-                    data.push(newData);
-                    return { ...prevState, data };
-                  });
                 }, 600);
               }),
             onRowUpdate: (newData, oldData) =>
               new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve();
-                  if (oldData) {
-                    this.setState((prevState) => {
-                      const data = [...prevState.data];
-                      data[data.indexOf(oldData)] = newData;
-                      return { ...prevState, data };
-                    });
+                setTimeout(async () => {
+                  const json = JSON.stringify(newData);
+                  const json2 = JSON.stringify(oldData);
+                  const dataFromAPI = await Axios.put(
+                      `${link[this.state.idSelected]}?json=${json}&json2=${json2}`
+                    );
+                  if(dataFromAPI['data']['success']){
+                    let data = dataFromAPI['data']['data'];
+                    if(data.length === undefined) data = [data];
+                    this.setState({data: data});
                   }
+                  resolve();
                 }, 600);
               }),
             onRowDelete: (oldData) =>
