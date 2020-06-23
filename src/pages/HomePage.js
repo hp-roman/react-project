@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
-import { RaisedButton, ListItem } from "material-ui";
+import { RaisedButton, ListItem, CircularProgress } from "material-ui";
 import { List } from "material-ui/List";
-import {items} from '../assets/items';
+import { items } from "../assets/items";
+import Axios from "axios";
 
 class HomePage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    const token = localStorage.getItem('token');
-    if(!token) this.props.history.push('/');
+    const token = localStorage.getItem("token");
+    if (!token) this.props.history.push("/");
+    this.state = {
+      isLoadingUpdate: false,
+    };
   }
   showList = () => {
     const listItem = [];
@@ -26,6 +30,14 @@ class HomePage extends Component {
     });
     return <List style={styleList}>{listItem}</List>;
   };
+  updateFood = () => {
+    this.setState({ isLoadingUpdate: true });
+    Axios.get("https://hml-project.herokuapp.com/api/admin/updateall").then(
+      () => {
+        this.setState({ isLoadingUpdate: false });
+      }
+    );
+  };
   itemSelected = (idSelected) => {
     this.props.history.push(`/details/${idSelected}`);
   };
@@ -35,9 +47,19 @@ class HomePage extends Component {
         <div>
           <AppBar title="Home page" style={{ textAlign: "center" }} />
           <div style={styleButton}>
-            <RaisedButton label="Refesh foods" primary={true} />
+            <RaisedButton
+              label="Refesh foods"
+              primary={true}
+              onClick={this.updateFood}
+            />
           </div>
-          {this.showList()}
+          {this.state.isLoadingUpdate ? (
+            <div style={{ textAlign: "center" }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            this.showList()
+          )}
         </div>
       </MuiThemeProvider>
     );
